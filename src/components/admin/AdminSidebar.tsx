@@ -11,6 +11,7 @@ import {
   BarChart3,
   Globe,
   CreditCard,
+  Handshake,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -21,6 +22,7 @@ const navItems = [
   { icon: Briefcase, label: 'Jobs', path: '/admin/jobs' },
   { icon: Users, label: 'Users', path: '/admin/users' },
   { icon: Bell, label: 'Notifications', path: '/admin/notifications' },
+  { icon: Handshake, label: 'Referrals', path: '/admin/referrals' },
   { icon: Globe, label: 'Crawlers', path: '/admin/crawlers' },
   { icon: BarChart3, label: 'Analytics', path: '/admin/analytics' },
   { icon: CreditCard, label: 'Revenue', path: '/admin/revenue' },
