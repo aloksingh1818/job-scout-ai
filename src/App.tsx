@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { MainLayout } from "./components/layout/MainLayout";
+import { AdminLayout } from "./components/admin/AdminLayout";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -11,6 +12,10 @@ import JobsPage from "./pages/JobsPage";
 import JobDetailPage from "./pages/JobDetailPage";
 import PricingPage from "./pages/PricingPage";
 import DashboardPage from "./pages/DashboardPage";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminJobs from "./pages/admin/AdminJobs";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminNotifications from "./pages/admin/AdminNotifications";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +38,14 @@ const App = () => (
             <Route path="/jobs/:id" element={<JobDetailPage />} />
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
+          </Route>
+
+          {/* Admin pages with admin layout */}
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="jobs" element={<AdminJobs />} />
+            <Route path="users" element={<AdminUsers />} />
+            <Route path="notifications" element={<AdminNotifications />} />
           </Route>
           
           <Route path="*" element={<NotFound />} />
