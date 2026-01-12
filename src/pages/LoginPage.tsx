@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuthStore } from '@/store/authStore';
-import { Zap, Mail, Lock, Eye, EyeOff, ArrowRight, AlertCircle } from 'lucide-react';
+import { Zap, Mail, Lock, Eye, EyeOff, ArrowRight, AlertCircle, Shield } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 
 const LoginPage = () => {
@@ -27,34 +28,36 @@ const LoginPage = () => {
     }
 
     const success = await login(email, password);
+    const { isAdmin } = useAuthStore.getState();
     
     if (success) {
       toast({
         title: 'Welcome back!',
         description: 'You have successfully logged in.',
       });
-      navigate('/dashboard');
+      navigate(isAdmin ? '/admin' : '/dashboard');
     } else {
       setError('Invalid email or password. Try demo credentials below.');
     }
   };
 
   const demoCredentials = [
-    { email: 'user@demo.com', password: 'demo123', tier: 'Free' },
-    { email: 'premium@demo.com', password: 'demo123', tier: 'Premium' },
-    { email: 'ultra@demo.com', password: 'demo123', tier: 'Ultra' },
+    { email: 'user@demo.com', password: 'demo123', tier: 'Free', isAdmin: false },
+    { email: 'premium@demo.com', password: 'demo123', tier: 'Premium', isAdmin: false },
+    { email: 'ultra@demo.com', password: 'demo123', tier: 'Ultra', isAdmin: false },
+    { email: 'admin@demo.com', password: 'admin123', tier: 'Admin', isAdmin: true },
   ];
 
-  const handleDemoLogin = async (email: string, password: string) => {
-    setEmail(email);
-    setPassword(password);
-    const success = await login(email, password);
+  const handleDemoLogin = async (demoEmail: string, demoPassword: string, isAdmin: boolean) => {
+    setEmail(demoEmail);
+    setPassword(demoPassword);
+    const success = await login(demoEmail, demoPassword);
     if (success) {
       toast({
         title: 'Welcome!',
-        description: 'Logged in with demo account.',
+        description: isAdmin ? 'Logged in as Admin.' : 'Logged in with demo account.',
       });
-      navigate('/dashboard');
+      navigate(isAdmin ? '/admin' : '/dashboard');
     }
   };
 
@@ -150,11 +153,19 @@ const LoginPage = () => {
               {demoCredentials.map((cred) => (
                 <button
                   key={cred.email}
-                  onClick={() => handleDemoLogin(cred.email, cred.password)}
-                  className="w-full flex items-center justify-between p-2 rounded-md bg-background hover:bg-accent/10 transition-colors text-sm"
+                  onClick={() => handleDemoLogin(cred.email, cred.password, cred.isAdmin)}
+                  className={cn(
+                    "w-full flex items-center justify-between p-2 rounded-md transition-colors text-sm",
+                    cred.isAdmin 
+                      ? "bg-primary/10 hover:bg-primary/20 border border-primary/20" 
+                      : "bg-background hover:bg-accent/10"
+                  )}
                 >
                   <span className="text-muted-foreground">{cred.email}</span>
-                  <span className="font-medium">{cred.tier}</span>
+                  <span className={cn(
+                    "font-medium",
+                    cred.isAdmin && "text-primary"
+                  )}>{cred.tier}</span>
                 </button>
               ))}
             </div>
